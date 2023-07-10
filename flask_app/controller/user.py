@@ -6,7 +6,7 @@ from flask import flash
 from flask_bcrypt import Bcrypt
 bcrypt = Bcrypt(app)
 
-
+#login and register
 @app.route('/')
 def index():
     return redirect('/dash')

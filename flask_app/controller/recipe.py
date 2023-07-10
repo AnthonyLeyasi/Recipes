@@ -6,11 +6,10 @@ from flask import flash
 from flask_bcrypt import Bcrypt
 bcrypt = Bcrypt(app)
 
-
+#create a new recipe
 @app.route('/new/recipe')
 def new_user():
     return render_template('new_recipe.html')
-
 
 
 
@@ -32,13 +31,14 @@ def process_recipe():
     Recipe.save(form_data)
     return redirect('/all/recipes')
 
+#Delete Recipe
 @app.route('/destroy/recipe/<int:id>')
 def delete(id):
     Recipe.destroy({'id': id})
     return redirect('/all/recipes')
 
 
-
+#View Recipe
 @app.route('/view/recipes/<int:id>')
 def view_recipe(id):
     if 'user_id' not in session:
@@ -46,18 +46,22 @@ def view_recipe(id):
 
     return render_template('view_recipe.html',recipe=Recipe.get_by_id({'id': id}))
 
-
+#Edit Recipe
 @app.route('/recipe/edit/<int:id>')
 def edit_ninja(id):
     recipe = Recipe.get_one({'id':id})
     return render_template('edit_recipe.html', recipe=recipe)
+
+
+
+
 
 @app.route('/recipes/edit/<int:id>', methods=['POST'])
 def process_edit_recipe(id):
     if 'user_id' not in session:
         return redirect('/')
     if not Recipe.validate_recipe(request.form):
-        return redirect(f'/recipes/edit/{id}')
+        return redirect(f'/recipe/edit/{id}')
 
     data = {
         'id': id,
@@ -69,3 +73,4 @@ def process_edit_recipe(id):
     }
     Recipe.update(data)
     return redirect('/all/recipes')
+
